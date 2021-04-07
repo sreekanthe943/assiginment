@@ -1,0 +1,53 @@
+import string, sys, threading, queue
+from queue import Queue
+
+p = string.printable
+k = [(x, y) for x in p[10:36] for y in p[35:9:-1]][0::27]
+import concurrent.futures
+
+
+def solution(x):
+    """
+
+    :param x: take text data
+    :return: encrypted form
+    """
+    sb = """!#$%"&'()*+,-./:;<=>?@[\]^_`{|}~ """
+    r = []
+    for i in x:
+        if i.isspace():
+            r.append(" ")
+        elif i in sb:
+            r.append(i)
+        else:
+            for k1, k2 in k:
+                if i.lower() == k1:
+                    if i.isupper():
+                        r.append(k2.upper())
+                    else:
+                        r.append(k2)
+
+    return "".join(r)
+
+
+with open(sys.argv[-1], "r") as fp:
+    x = fp.readlines()
+    qu = queue.Queue()
+    with open("file3.txt", "w+") as fp2:
+        with open("file3.txt", "w+") as fp2:
+            for i in x:
+                en = solution(i)
+                fp2.writelines(en)
+                fp2.write("\n")
+    print("done")
+
+# with concurrent.futures.ThreadPoolExecutor() as executor:
+#     future = executor.submit(solution, i)
+#     return_value = future.result()
+#     print(return_value)
+# t1=threading.Thread(target=solution,args=(i,))
+# t1.start()
+# t1.join()
+# print(qu.get())
+# fp2.writelines(t1.join())
+# fp2.write("\n")
